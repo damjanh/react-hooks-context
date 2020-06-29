@@ -58,6 +58,15 @@ const NoteApp = () => {
 }
 
 const Note = ({note, removeNote}) => {
+  useEffect(() => {
+    console.log('Setting up effect!');
+
+    return () => {
+      console.log('Cleaning up effect!');
+    };
+
+  }, []);
+
   return (
     <div>
     <h3>{note.title}</h3>
