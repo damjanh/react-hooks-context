@@ -1,48 +1,52 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useReducer } from 'react';
 import ReactDOM from 'react-dom';
 import * as serviceWorker from './serviceWorker';
 
-const NoteApp = () => {
-  const initNotes = JSON.parse(localStorage.getItem('notes'));
+const notesReducer = (state, action) => {
+  switch (action.type) {
+    case 'POPULATE_NOTES':
+      return action.notes;
+    case 'ADD_NOTE':
+      return [...state, {title: action.note.title, body: action.note.body}];
+    case 'REMOVE_NOTE':
+      return state.filter((note) => note.title !== action.title);
+    default:
+      return state;
+  }
+};
 
-  const [notes, setNotes] = useState(initNotes);
+const NoteApp = () => {
+  const [notes, dispatch] = useReducer(notesReducer, JSON.parse(localStorage.getItem('notes')));
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
 
   useEffect(() => {
     localStorage.setItem('notes', JSON.stringify(notes));
-    console.log('Set notes data!' + JSON.stringify(notes))
   }, [notes]);
 
   useEffect(() => {
     const notesData = JSON.parse(localStorage.getItem('notes'));
-    console.log('Read notes data:' + JSON.stringify(notesData))
     if (notesData) {
-      setNotes(notesData);
+      dispatch({type: 'POPULATE_NOTES', notes: notesData});
     }
   }, []);
 
   const addNote = (e) => {
     e.preventDefault();
-    setNotes([
-      ...notes,
-      { title, body }
-    ]);
+    dispatch({type: 'ADD_NOTE', note: {title: title, body: body}});
     setTitle('');
     setBody('');
   };
 
   const removeNote = (title) => {
-    setNotes(
-      notes.filter((note) => note.title !== title)
-    );
+    dispatch({type: 'REMOVE_NOTE', title: title})
   };
 
   return (
     <div>
       <h1>Notes</h1>
       {notes.map((note) => (
-          <Note key={note.title} note={note} removeNote={removeNote}/>
+          <Note key={note.title} title={note.title} body={note.body} removeNote={removeNote}/>
         )
       )}
       <p>
@@ -57,22 +61,20 @@ const NoteApp = () => {
   );
 }
 
-const Note = ({note, removeNote}) => {
+const Note = (props) => {
+  const {title, body, removeNote} = props;
   useEffect(() => {
     console.log('Setting up effect!');
-
     return () => {
       console.log('Cleaning up effect!');
     };
-
   }, []);
-
   return (
     <div>
-    <h3>{note.title}</h3>
-    <p>{note.body}</p>
-    <button onClick={() => removeNote(note.title)}>x</button>
-  </div>
+      <h3>{title}</h3>
+      <p>{body}</p>
+      <button onClick={() => removeNote(title)}>x</button>
+    </div>
   );
 }
 
