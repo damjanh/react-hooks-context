@@ -3,15 +3,24 @@ import ReactDOM from 'react-dom';
 import * as serviceWorker from './serviceWorker';
 
 const NoteApp = () => {
-  const notesData = JSON.parse(localStorage.getItem('notes'));
+  const initNotes = JSON.parse(localStorage.getItem('notes'));
 
-  const [notes, setNotes] = useState(notesData || []);
+  const [notes, setNotes] = useState(initNotes);
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
 
   useEffect(() => {
     localStorage.setItem('notes', JSON.stringify(notes));
-  });
+    console.log('Set notes data!' + JSON.stringify(notes))
+  }, [notes]);
+
+  useEffect(() => {
+    const notesData = JSON.parse(localStorage.getItem('notes'));
+    console.log('Read notes data:' + JSON.stringify(notesData))
+    if (notesData) {
+      setNotes(notesData);
+    }
+  }, []);
 
   const addNote = (e) => {
     e.preventDefault();
@@ -57,8 +66,12 @@ const NoteApp = () => {
 //   const [text, setText] = useState(initialText);
 
 //   useEffect(() => {
+//     console.log('This should only run once.');
+//   }, []);
+
+//   useEffect(() => {
 //     document.title = count;
-//   });
+//   }, [count]);
 
 //   const increment = () => {
 //     setCount(count + 1);
