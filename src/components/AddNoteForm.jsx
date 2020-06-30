@@ -1,10 +1,12 @@
 import React, { useState, useContext } from 'react';
 import NotesContext from '../context/notes-context';
+import userMousePosition from '../hooks/useMousePosition';
 
 const AddNoteForm = () => {
   const { dispatch } = useContext(NotesContext);
   const [ title, setTitle ] = useState('');
   const [ body, setBody ] = useState('');
+  const position = userMousePosition();
 
   const addNote = (e) => {
     e.preventDefault();
@@ -22,7 +24,7 @@ const AddNoteForm = () => {
   return (
     <>
       <p>
-        Add Note
+        Add Note {position.x}, {position.y}
       </p>
       <form onSubmit={addNote}>
         <input type="text" value={title} onChange={(e) => { setTitle(e.target.value) }} />
