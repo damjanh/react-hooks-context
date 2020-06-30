@@ -5,7 +5,7 @@ import NoteApp from './components/NoteApp';
 
 ReactDOM.render(
   <React.StrictMode>
-    <NoteApp/>
+    <NoteApp />
   </React.StrictMode>,
   document.getElementById('root')
 );

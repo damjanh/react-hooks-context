@@ -3,12 +3,18 @@ import NotesContext from '../context/notes-context';
 
 const AddNoteForm = () => {
   const { dispatch } = useContext(NotesContext);
-  const [title, setTitle] = useState('');
-  const [body, setBody] = useState('');
+  const [ title, setTitle ] = useState('');
+  const [ body, setBody ] = useState('');
 
   const addNote = (e) => {
     e.preventDefault();
-    dispatch({type: 'ADD_NOTE', note: {title: title, body: body}});
+    dispatch({
+      type: 'ADD_NOTE',
+      note: {
+        title: title,
+        body: body,
+      },
+    });
     setTitle('');
     setBody('');
   };
@@ -19,12 +25,12 @@ const AddNoteForm = () => {
         Add Note
       </p>
       <form onSubmit={addNote}>
-        <input type="text" value={title} onChange={(e) => { setTitle(e.target.value) }}/>
-        <textarea value={body} onChange={(e) => { setBody(e.target.value)}}></textarea>
+        <input type="text" value={title} onChange={(e) => { setTitle(e.target.value) }} />
+        <textarea value={body} onChange={(e) => { setBody(e.target.value) }}></textarea>
         <button>Add Note</button>
       </form>
     </>
-  )
+  );
 };
 
 export { AddNoteForm as default };

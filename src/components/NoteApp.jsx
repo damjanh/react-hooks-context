@@ -5,7 +5,7 @@ import NoteList from './NoteList';
 import AddNoteForm from './AddNoteForm';
 
 const NoteApp = () => {
-  const [notes, dispatch] = useReducer(notesReducer, JSON.parse(localStorage.getItem('notes')));
+  const [ notes, dispatch ] = useReducer(notesReducer, JSON.parse(localStorage.getItem('notes')));
   
   useEffect(() => {
     localStorage.setItem('notes', JSON.stringify(notes));
@@ -14,15 +14,18 @@ const NoteApp = () => {
   useEffect(() => {
     const notesData = JSON.parse(localStorage.getItem('notes'));
     if (notesData) {
-      dispatch({type: 'POPULATE_NOTES', notes: notesData});
+      dispatch({
+        type: 'POPULATE_NOTES',
+        notes: notesData,
+      });
     }
   }, []);
 
   return (
     <NotesContext.Provider value={{notes: notes, dispatch: dispatch}}>
       <h1>Notes</h1>
-      <NoteList/>
-      <AddNoteForm/>
+      <NoteList />
+      <AddNoteForm />
     </NotesContext.Provider>
   );
 }

@@ -6,6 +6,7 @@ const NoteList = () => {
   const { notes } = useContext(NotesContext);
   return notes.map((note) => (
     <Note key={note.title} title={note.title} body={note.body} />
-))};
+  ));
+};
 
 export { NoteList as default };
